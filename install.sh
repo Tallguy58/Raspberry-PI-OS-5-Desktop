@@ -27,6 +27,55 @@ if ! dpkg -s $1 >/dev/null 2>&1; then
 fi
 }
 
+function get-kodi() {
+echo -e '\033[1;33mInstalling \033[1;34mKODI Media Centre\033[0m'
+mkdir -p /var/lib/flatpak/exports/share
+mkdir -p /root/.local/share/flatpak/exports/share
+install-package flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install -y --noninteractive flathub tv.kodi.Kodi
+
+## AutoRun KODI
+echo -e '[Desktop Entry]'>/usr/share/xsessions/kodi.desktop
+echo -e 'Type=Application'>>/usr/share/xsessions/kodi.desktop
+echo -e 'Name=Kodi Media Center'>>/usr/share/xsessions/kodi.desktop
+echo -e 'Exec=/usr/share/runkodi.sh'>>/usr/share/xsessions/kodi.desktop
+chmod 0777 /usr/share/xsessions/kodi.desktop
+## KODI Bash Script
+echo -e '#!/usr/bin/env bash'>/usr/share/runkodi.sh
+echo -e '/usr/bin/flatpak run --command=kodi tv.kodi.Kodi --standalone'>>/usr/share/runkodi.sh
+chmod 0777 /usr/share/runkodi.sh
+
+## Keymap settings...
+mkdir -p /home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/
+touch /home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '<keymap>'>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '  <global>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '    <keyboard>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <b>noop</b>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <backslash>noop</backslash>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <d>noop</d>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <e>noop</e>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <equals>noop</equals>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <g>noop</g>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <h>noop</h>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <k>noop</k>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <minus>noop</minus>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <numpadminus>noop</numpadminus>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <numpadplus>noop</numpadplus>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <t>noop</t>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <tab>noop</tab>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <plus>noop</plus>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <v>noop</v>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <volume_mute>noop</volume_mute>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <volume_down>noop</volume_down>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <volume_up>noop</volume_up>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '      <y>noop</y>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '    </keyboard>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '  </global>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+echo -e '</keymap>'>>/home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+}
+
 function get-SimpleHTTPServerWithUpload() {
 echo -e '\033[1;33mInstalling \033[1;34mSimple HTTP Service with Upload\033[0m'
 cp -f files/SimpleHTTPServerWithUpload.py /bin
@@ -180,7 +229,6 @@ reset
 history -c
 xset s off
 xset s noblank
-
 install-package default-jre
 install-package gedit
 install-package libc6
@@ -192,7 +240,6 @@ install-package openssl
 install-package libpam-runtime
 install-package gdebi
 install-package openssh-server
-
 install-package gnupg
 install-package curl
 install-package xterm
@@ -229,6 +276,7 @@ get-samba
 get-php
 get-SimpleHTTPServerWithUpload
 get-games
+get-kodi
 desktop-settings
 
 install-package cinnamon-desktop-environment
