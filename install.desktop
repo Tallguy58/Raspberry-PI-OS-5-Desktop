@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
-Name=Install Extras
-Comment=Customise Raspberry OS with Cinnamon Desktop and extras
+Name=Install Raspberry PI Extras & Kodi
+Comment=Install Raspberry Pi Extras & Kodi
 Exec=lxterminal -t "Installation Bash Script" --geometry=120x40 -e bash -c 'cd "%k"; sudo bash ./install.sh'
 Icon=utilities-terminal
 Type=Application
