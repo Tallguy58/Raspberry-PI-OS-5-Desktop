@@ -38,9 +38,9 @@ mbr2gpt converts any size USB device, including SD cards placed in a USB adapter
 Usage syntax is:<br>
 `mbr2gpt /dev/sdX or mbr2gpt /dev/nvmeXn1`<br>
 mbr2gpt will prompt for permission to perform the following optional functions:<br>
-* Convert the USB device to use GPT partition tables<br>
-* Expand the ROOT partition to use all available space<br>
-* Set the SD card to boot the USB device
+1. Convert the USB device to use GPT partition tables<br>
+2. Expand the ROOT partition to use all available space<br>
+3. Set the SD card to boot the USB device
 # set-partuuid displays or changes the ROOT partition PARTUUID on a device.
 Usage syntax is:<br>
 `set-partuuid device [ hhhhhhhh-02 | hhhhhhhh-hhhh-hhhh-hhhh-hhhhhhhhhhhh | random ]`<br>
