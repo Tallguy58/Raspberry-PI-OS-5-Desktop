@@ -1,12 +1,21 @@
 #!/usr/bin/env bash
 
+currentuser=$(users | awk '{print $1}')
+
 if [ "$XDG_CURRENT_DESKTOP" != "LXDE" ]; then
     echo -e '\033cGraphical environment \033[1;31mX11\033[0m not detected.\n'
-    read -n 1 -s -r -p 'Press ANY key to exit...'
-    exit
+    read -n 1 -s -r -p 'Press ANY key to update and reboot...'
+	sed /etc/lightdm/lightdm.conf -i -e "s/^#\\?user-session.*/user-session=rpd-x/"
+	sed /etc/lightdm/lightdm.conf -i -e "s/^#\\?autologin-session.*/autologin-session=rpd-x/"
+	sed /etc/lightdm/lightdm.conf -i -e "s/^#\\?greeter-session.*/greeter-session=pi-greeter-x/"
+	sed /etc/lightdm/lightdm.conf -i -e "s/^fallback-test.*/#fallback-test=/"
+	sed /etc/lightdm/lightdm.conf -i -e "s/^fallback-session.*/#fallback-session=/"
+	sed /etc/lightdm/lightdm.conf -i -e "s/^fallback-greeter.*/#fallback-greeter=/"
+	if [ -e "/var/lib/AccountsService/users/$currentuser" ] ; then
+		sed "/var/lib/AccountsService/users/$currentuser" -i -e "s/XSession=.*/XSession=rpd-x/"
+	fi
+    reboot
 fi
-
-currentuser=$(users | awk '{print $1}')
 
 function run-in-user-session() {
     _display_id=":$(find /tmp/.X11-unix/* | sed 's#/tmp/.X11-unix/X##' | head -n 1)"
