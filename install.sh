@@ -254,7 +254,6 @@ install-package gdebi
 install-package openssh-server
 install-package gnupg
 install-package curl
-install-package xterm
 install-package lxappearance
 install-package alacarte
 install-package arc-theme
