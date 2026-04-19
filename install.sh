@@ -94,10 +94,12 @@ echo -e '\033[1;33mInstalling \033[1;34mSimple HTTP Service with Upload\033[0m'
 cp -f files/SimpleHTTPServerWithUpload.py /bin
 chmod +x -f /bin/SimpleHTTPServerWithUpload.py
 ## Create BASH Script
-echo -e '#!/bin/bash'>/bin/SimpleHTTPServerWithUpload.sh
-echo -e 'clear'>>/bin/SimpleHTTPServerWithUpload.sh
-echo -e 'cd /mnt/shared_media'>>/bin/SimpleHTTPServerWithUpload.sh
-echo -e 'python3 /bin/SimpleHTTPServerWithUpload.py 8080'>>/bin/SimpleHTTPServerWithUpload.sh
+cat <<EOF > /bin/SimpleHTTPServerWithUpload.sh
+#!/bin/bash
+clear
+cd /mnt/shared_media
+python3 /bin/SimpleHTTPServerWithUpload.py 8080
+EOF
 ## Create Service
 echo -e '[Unit]'>/lib/systemd/system/SimpleHTTPServerWithUpload.service
 echo -e 'Description=Simple HTTP Server With Upload'>>/lib/systemd/system/SimpleHTTPServerWithUpload.service
