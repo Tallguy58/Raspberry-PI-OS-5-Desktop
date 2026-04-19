@@ -104,9 +104,11 @@ EOF
 cat <<EOF > /lib/systemd/system/SimpleHTTPServerWithUpload.service
 [Unit]
 Description=Simple HTTP Server With Upload
+
 [Service]
 ExecStart=/bin/SimpleHTTPServerWithUpload.sh
 Restart=Always
+
 [Install]
 WantedBy=multi-user.target
 EOF
