@@ -60,7 +60,7 @@ cp -f /var/lib/flatpak/exports/share/applications/tv.kodi.Kodi.desktop /home/$cu
 
 ## Keymap settings...
 mkdir -p /home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/
-cat <<EOF > /home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
+cat <<'EOF' > /home/$currentuser/.var/app/tv.kodi.Kodi/data/userdata/keymaps/keyboard.xml
 <keymap>
   <global>
     <keyboard>
@@ -94,14 +94,14 @@ echo -e '\033[1;33mInstalling \033[1;34mSimple HTTP Service with Upload\033[0m'
 cp -f files/SimpleHTTPServerWithUpload.py /bin
 chmod +x -f /bin/SimpleHTTPServerWithUpload.py
 ## Create BASH Script
-cat <<EOF > /bin/SimpleHTTPServerWithUpload.sh
+cat <<'EOF' > /bin/SimpleHTTPServerWithUpload.sh
 #!/bin/bash
 clear
 cd /mnt/shared_media
 python3 /bin/SimpleHTTPServerWithUpload.py 8080
 EOF
 ## Create Service
-cat <<EOF > /lib/systemd/system/SimpleHTTPServerWithUpload.service
+cat <<'EOF' > /lib/systemd/system/SimpleHTTPServerWithUpload.service
 [Unit]
 Description=Simple HTTP Server With Upload
 
@@ -210,7 +210,7 @@ update-alternatives --set phar.phar /usr/bin/phar.phar7.4
 chmod -Rf 0777 /var/www/html
 rm -r -f /var/www/html/*
 unzip -o -q files/navphp4.45.zip -d/var/www/html
-cat <<EOF > /var/www/html/.htaccess
+cat <<'EOF' > /var/www/html/.htaccess
 php_value upload_max_filesize 4.0G
 php_value post_max_size 4.2G
 php_value memory_limit -1
@@ -245,8 +245,7 @@ fi
 
 reset
 history -c
-xset s off
-xset s noblank
+xset s off s noblank
 install-package default-jre
 install-package gedit
 install-package libc6
@@ -289,7 +288,7 @@ else
 	if [ ! -d /etc/samba ]; then
 		mkdir -p /etc/samba
 	fi
-	cat <<EOF > /etc/samba/smb.conf
+	cat <<'EOF' > /etc/samba/smb.conf
 [global]
 	workgroup = WORKGROUP
 	client min protocol = NT1
@@ -327,15 +326,18 @@ EOF
     for dev in $(blkid -t TYPE=ntfs -o device); do
         if [ $counter -eq 0 ]; then
             MOUNT_POINT="${BASE_DIR}/${PREFIX}"
+			if [ ! -d "$MOUNT_POINT" ]; then
+				mkdir -p "$MOUNT_POINT"
+			fi
 			run-in-user-session net usershare add $PREFIX $MOUNT_POINT "Media Centre" Everyone:F guest_ok=y
         else
             MOUNT_POINT="${BASE_DIR}/${PREFIX}$(printf "%02d" $counter)"
+			if [ ! -d "$MOUNT_POINT" ]; then
+				mkdir -p "$MOUNT_POINT"
+			fi
 			run-in-user-session net usershare add $PREFIX$(printf "%02d" $counter) $MOUNT_POINT "Media Centre"$(printf "%02d" $counter) Everyone:F guest_ok=y
         fi
 		MOUNT_NAME="${MOUNT_POINT#\/mnt\/}"
-        if [ ! -d "$MOUNT_POINT" ]; then
-            mkdir -p "$MOUNT_POINT"
-        fi
         uuid=$(blkid -s UUID $dev | cut -f2 -d':' | cut -c2-)
         mountline=$uuid" "$MOUNT_POINT" auto nosuid,nodev,nofail 0 0"
         if ! grep -Fxq $uuid" "$MOUNT_POINT" auto nosuid,nodev,nofail 0 0" /etc/fstab; then
